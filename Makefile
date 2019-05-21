@@ -36,7 +36,7 @@ ${VENV_NAME}/dev.installed: setup.py setup.cfg requirements.txt
 install-dev: venv ${VENV_NAME}/dev.installed
 
 test: install-dev clean-pyc
-	${VENV_ACTIVATE}; pytest -vv --cov=src  --cov-report=term-missing tests
+	${VENV_ACTIVATE}; pytest -vv --cov=src  --cov-report=term tests
 
 VERSION_PATCH = $(shell bumpversion --dry-run --list patch | grep new_version | sed -r s/'^.*='//)
 VERSION_MINOR = $(shell bumpversion --dry-run --list minor | grep new_version | sed -r s/'^.*='//)
