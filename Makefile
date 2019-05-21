@@ -1,4 +1,4 @@
-.PHONY: venv help test
+.PHONY: venv help test clean clean-pyc
 
 .default: help
 
@@ -35,8 +35,8 @@ ${VENV_NAME}/dev.installed: setup.py setup.cfg requirements.txt
 
 install-dev: venv ${VENV_NAME}/dev.installed
 
-test: install-dev
-	${VENV_ACTIVATE}; pytest --cov=src  --cov-report=term-missing tests
+test: install-dev clean-pyc
+	${VENV_ACTIVATE}; pytest -vv --cov=src  --cov-report=term-missing tests
 
 VERSION_PATCH = $(shell bumpversion --dry-run --list patch | grep new_version | sed -r s/'^.*='//)
 VERSION_MINOR = $(shell bumpversion --dry-run --list minor | grep new_version | sed -r s/'^.*='//)
@@ -56,3 +56,9 @@ bumpversion-major:
 	bumpversion major
 	${info version=${VERSION_MAJOR}}
 	git tag -a -m "Version ${VERSION_MAJOR}" v${VERSION_MAJOR}
+
+clean: clean-pyc
+clean-pyc:
+	find . -name '*.pyc' -exec rm {} \;
+	# find src -type d -name '__pycache__' -exec rm -rf {} \;
+	rm -rf .pytest_cache
